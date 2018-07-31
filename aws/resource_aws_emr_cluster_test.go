@@ -3297,6 +3297,16 @@ resource "aws_emr_cluster" "tf-test-cluster" {
   keep_job_flow_alive_when_no_steps = %s
   termination_protection = false
 
+  step {
+    action_on_failure = "CONTINUE"
+    name              = "Spark Step"
+
+    hadoop_jar_step {
+      jar  = "command-runner.jar"
+      args = ["spark-example", "SparkPi", "10"]
+    }
+  }
+
   bootstrap_action {
     path = "s3://elasticmapreduce/bootstrap-actions/run-if"
     name = "runif"
